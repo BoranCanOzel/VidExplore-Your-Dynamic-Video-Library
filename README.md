@@ -7,6 +7,7 @@ Welcome to **VidExplore**, a sophisticated and user-friendly video viewer that d
 
 - 📂 **Automatic Directory Scanning**: VidExplore scans folders in the same directory, identifying video files and their corresponding text files for descriptions.
 - ▶️ **Dynamic Video Player**: Easily navigate through videos with a sleek player that supports descriptions and download options.
+- ⬇️ **Download Button**: Download your videos directly from the player.
 - 📱 **Responsive Design**: Fully responsive layout ensuring optimal viewing experience on any device.
 - 🖥️ **User-Friendly Interface**: Simple and elegant UI that makes browsing and watching videos a breeze.
 
@@ -31,7 +32,7 @@ Welcome to **VidExplore**, a sophisticated and user-friendly video viewer that d
 
 3. **Start your local server:**
    - If you have a local server setup like XAMPP or WAMP, place the project in the `htdocs` or `www` directory.
-   - Alternatively, use the provided `start.bat` file to launch a simple PHP server (Windows only).
+   - Alternatively, use the provided `start.bat` file to launch a simple PHP server (Windows only). You can run it on your PC and access the videos on your phone as well.
 
 4. **Access VidExplore:**
    Open your browser and navigate to `http://localhost/path-to-your-project`.
