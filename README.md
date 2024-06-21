@@ -1,7 +1,8 @@
-
 # 🎥 VidExplore: Your Dynamic Video Library
 
 Welcome to **VidExplore**, a sophisticated and user-friendly video viewer that dynamically scans your directories for video files and their corresponding descriptions. Inspired by the seamless interfaces of platforms like Skool and Udemy, VidExplore offers an intuitive way to organize and view your video content.
+
+![VidExplore Showcase](showcase.png)
 
 ## Features
 
