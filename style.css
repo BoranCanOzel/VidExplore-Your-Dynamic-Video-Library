@@ -1,0 +1,216 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
+}
+
+.container {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar {
+  width: 300px;
+  background-color: #f9f9f9;
+  border-right: 1px solid #ddd;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+.sidebar h3 {
+  margin-top: 0;
+  font-size: 16px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  margin-bottom: 10px;
+}
+
+.sidebar .folder {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold; /* Make folder names bold */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar .folder:hover {
+  background-color: #e0e0e0; /* Gray hover */
+}
+
+.sidebar .folder.selected {
+  background-color: #ffeb3b; /* Yellow selected */
+}
+
+.sidebar .video-item {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: normal; /* Make video names not bold */
+  padding-left: 30px; /* Indentation for sub-items */
+}
+
+.sidebar .video-item:hover {
+  background-color: #e0e0e0; /* Gray hover */
+}
+
+.sidebar .video-item.selected {
+  background-color: #ffeb3b; /* Yellow selected */
+}
+
+.content {
+  flex-grow: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.video-container {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.video-container video {
+  width: 100%;
+  height: auto;
+}
+
+.video-container p {
+  margin-top: 10px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.video-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.download-button {
+  background-color: #007bff;
+  color: white;
+  padding: 5px 10px;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+.download-button:hover {
+  background-color: #0056b3;
+}
+
+.sidebar .sub-folder {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold; /* Make subfolder names bold */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 30px; /* Indentation for subfolders same as videos */
+}
+
+.sidebar .sub-folder:hover {
+  background-color: #d0d0d0; /* Slightly different gray hover */
+}
+
+.sidebar .sub-folder.selected {
+  background-color: #c0c0c0; /* Slightly different selected color */
+}
+
+.sidebar .sub-items {
+  padding-left: 30px; /* Indentation for subfolder items */
+}
+
+/* Existing styles... */
+/* Existing styles... */
+
+/* Existing styles... */
+
+@media screen and (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .video-container {
+    display: none;
+    width: 100%;
+  }
+
+  .back-to-menu-button {
+    display: none;
+    margin-top: 20px;
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+  }
+
+  .menu-visible .sidebar {
+    display: block;
+  }
+
+  .menu-visible .video-container {
+    display: none;
+  }
+
+  .menu-hidden .sidebar {
+    display: none;
+  }
+
+  .menu-hidden .video-container {
+    display: block;
+  }
+
+  .menu-hidden .back-to-menu-button {
+    display: block;
+  }
+}
+
+/* Styles for desktop */
+@media screen and (min-width: 769px) {
+  .back-to-menu-button {
+    display: none;
+  }
+}
