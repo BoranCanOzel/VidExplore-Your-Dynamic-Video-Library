@@ -23,8 +23,9 @@ Welcome to **VidExplore**, a sophisticated and user-friendly video viewer that d
 
 1. **Clone the repository:**
    ```sh
-   git clone https://github.com/yourusername/video-explore.git
-   cd video-explore
+   git clone https://github.com/BoranCanOzel/VidExplore-Your-Dynamic-Video-Library.git
+   cd VidExplore-Your-Dynamic-Video-Library
+
    ```
 
 2. **Set up your environment:**
