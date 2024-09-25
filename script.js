@@ -1,4 +1,23 @@
 document.addEventListener("DOMContentLoaded", function () {
+  // take video names from cookies
+  const lastVideo = getCookie("lastVideo");
+  const lastFolder = getCookie("lastFolder");
+
+  // play video if exits
+  if (lastVideo && lastFolder) {
+    const videoContainer = document.querySelector(".video-container");
+    videoContainer.innerHTML = `
+      <video controls autoplay>
+        <source src="${lastFolder}/${lastVideo}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    `;
+    console.log(`Oynatılan video: ${lastFolder}/${lastVideo}`);
+  } else {
+    console.log("Çerezde hiç video bulunamadı.");
+  }
+
+  // Klasörleri al ve butonları oluştur
   fetch("whatfoldersarehere.php")
     .then((response) => response.json())
     .then((data) => {
@@ -12,14 +31,13 @@ document.addEventListener("DOMContentLoaded", function () {
         folderButton.addEventListener("click", function () {
           const items = this.nextElementSibling;
           const arrow = this.querySelector(".toggle-arrow");
+          const folderName = this.getAttribute("data-folder"); // set here
+          
           if (items.style.display === "none") {
             items.style.display = "block";
             arrow.innerHTML = "&#9660;"; // Down arrow
             if (items.childElementCount === 0) {
-              const folderName = this.getAttribute("data-folder");
-              fetch(
-                `getVideosInFolder.php?folder=${encodeURIComponent(folderName)}`
-              )
+              fetch(`getVideosInFolder.php?folder=${encodeURIComponent(folderName)}`)
                 .then((response) => response.json())
                 .then((contents) => {
                   contents.forEach((content) => {
@@ -28,98 +46,67 @@ document.addEventListener("DOMContentLoaded", function () {
                       subLi.innerHTML = `<button class="sub-folder" data-folder="${folderName}/${content.name}">${content.name} <span class="toggle-arrow">&#9654;</span></button><ul class="sub-items" style="display: none;"></ul>`;
                       items.appendChild(subLi);
 
-                      const subFolderButton =
-                        subLi.querySelector(".sub-folder");
+                      const subFolderButton = subLi.querySelector(".sub-folder");
                       subFolderButton.addEventListener("click", function () {
                         const subItems = this.nextElementSibling;
                         const subArrow = this.querySelector(".toggle-arrow");
+                        const subFolderName = this.getAttribute("data-folder"); // set here
+                        
                         if (subItems.style.display === "none") {
                           subItems.style.display = "block";
                           subArrow.innerHTML = "&#9660;"; // Down arrow
                           if (subItems.childElementCount === 0) {
-                            const subFolderName =
-                              this.getAttribute("data-folder");
-                            fetch(
-                              `getVideosInFolder.php?folder=${encodeURIComponent(
-                                subFolderName
-                              )}`
-                            )
+                            fetch(`getVideosInFolder.php?folder=${encodeURIComponent(subFolderName)}`)
                               .then((response) => response.json())
                               .then((subContents) => {
                                 subContents.forEach((subContent) => {
                                   if (subContent.type === "folder") {
-                                    const subSubLi =
-                                      document.createElement("li");
+                                    const subSubLi = document.createElement("li");
                                     subSubLi.innerHTML = `<button class="sub-folder" data-folder="${subFolderName}/${subContent.name}">${subContent.name} <span class="toggle-arrow">&#9654;</span></button><ul class="sub-items" style="display: none;"></ul>`;
                                     subItems.appendChild(subSubLi);
                                   } else {
-                                    const subItemLi =
-                                      document.createElement("li");
-                                    const subVideoButton =
-                                      document.createElement("button");
+                                    const subItemLi = document.createElement("li");
+                                    const subVideoButton = document.createElement("button");
                                     subVideoButton.classList.add("video-item");
-                                    subVideoButton.dataset.video =
-                                      encodeURIComponent(subContent.video);
-                                    subVideoButton.dataset.description =
-                                      subContent.description;
-                                    subVideoButton.textContent =
-                                      subContent.name;
+                                    subVideoButton.dataset.video = encodeURIComponent(subContent.video);
+                                    subVideoButton.dataset.description = subContent.description;
+                                    subVideoButton.textContent = subContent.name;
                                     subItemLi.appendChild(subVideoButton);
                                     subItems.appendChild(subItemLi);
 
-                                    subVideoButton.addEventListener(
-                                      "click",
-                                      function () {
-                                        const previouslySelected =
-                                          document.querySelector(".selected");
-                                        if (previouslySelected) {
-                                          previouslySelected.classList.remove(
-                                            "selected"
-                                          );
-                                        }
+                                    subVideoButton.addEventListener("click", function () {
+                                      const previouslySelected = document.querySelector(".selected");
+                                      if (previouslySelected) {
+                                        previouslySelected.classList.remove("selected");
+                                      }
 
-                                        this.classList.add("selected");
+                                      this.classList.add("selected");
 
-                                        const videoContainer =
-                                          document.querySelector(
-                                            ".video-container"
-                                          );
-                                        videoContainer.innerHTML = `
+                                      const videoContainer = document.querySelector(".video-container");
+                                      videoContainer.innerHTML = `
                                         <div class="video-title">
                                           <h2>${this.textContent}</h2>
-                                          <a href="${subFolderName}/${
-                                          this.dataset.video
-                                        }" download class="download-button">Download</a>
+                                          <a href="${subFolderName}/${this.dataset.video}" download class="download-button">Download</a>
                                         </div>
                                         <video controls>
-                                          <source src="${subFolderName}/${
-                                          this.dataset.video
-                                        }" type="video/mp4">
+                                          <source src="${subFolderName}/${this.dataset.video}" type="video/mp4">
                                           Your browser does not support the video tag.
                                         </video>
-                                        <p>${this.dataset.description.replace(
-                                          /\n/g,
-                                          "<br>"
-                                        )}</p>
+                                        <p>${this.dataset.description.replace(/\n/g, "<br>")}</p>
                                       `;
 
-                                        document.body.classList.add(
-                                          "menu-hidden"
-                                        );
-                                        document.body.classList.remove(
-                                          "menu-visible"
-                                        );
-                                      }
-                                    );
+                                      // save video and folder name to cookies
+                                      const videoName = decodeURIComponent(this.dataset.video);
+                                      setCookie("lastFolder", subFolderName, 7);
+                                      setCookie("lastVideo", videoName, 7);
+
+                                      document.body.classList.add("menu-hidden");
+                                      document.body.classList.remove("menu-visible");
+                                    });
                                   }
                                 });
                               })
-                              .catch((error) =>
-                                console.error(
-                                  `Error fetching contents of subfolder ${subFolderName}:`,
-                                  error
-                                )
-                              );
+                              .catch((error) => console.error(`Error fetching contents of subfolder ${subFolderName}:`, error));
                           }
                         } else {
                           subItems.style.display = "none";
@@ -130,43 +117,37 @@ document.addEventListener("DOMContentLoaded", function () {
                       const itemLi = document.createElement("li");
                       const videoButton = document.createElement("button");
                       videoButton.classList.add("video-item");
-                      videoButton.dataset.video = encodeURIComponent(
-                        content.video
-                      );
+                      videoButton.dataset.video = encodeURIComponent(content.video);
                       videoButton.dataset.description = content.description;
                       videoButton.textContent = content.name;
                       itemLi.appendChild(videoButton);
                       items.appendChild(itemLi);
 
                       videoButton.addEventListener("click", function () {
-                        const previouslySelected =
-                          document.querySelector(".selected");
+                        const previouslySelected = document.querySelector(".selected");
                         if (previouslySelected) {
                           previouslySelected.classList.remove("selected");
                         }
 
                         this.classList.add("selected");
 
-                        const videoContainer =
-                          document.querySelector(".video-container");
+                        const videoContainer = document.querySelector(".video-container");
                         videoContainer.innerHTML = `
                           <div class="video-title">
                             <h2>${this.textContent}</h2>
-                            <a href="${folderName}/${
-                          this.dataset.video
-                        }" download class="download-button">Download</a>
+                            <a href="${folderName}/${this.dataset.video}" download class="download-button">Download</a>
                           </div>
                           <video controls>
-                            <source src="${folderName}/${
-                          this.dataset.video
-                        }" type="video/mp4">
+                            <source src="${folderName}/${this.dataset.video}" type="video/mp4">
                             Your browser does not support the video tag.
                           </video>
-                          <p>${this.dataset.description.replace(
-                            /\n/g,
-                            "<br>"
-                          )}</p>
+                          <p>${this.dataset.description.replace(/\n/g, "<br>")}</p>
                         `;
+
+                        // save video and folder name to cookies
+                        const videoName = decodeURIComponent(this.dataset.video);
+                        setCookie("lastFolder", folderName, 7);
+                        setCookie("lastVideo", videoName, 7);
 
                         document.body.classList.add("menu-hidden");
                         document.body.classList.remove("menu-visible");
@@ -174,12 +155,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                   });
                 })
-                .catch((error) =>
-                  console.error(
-                    `Error fetching contents of folder ${folderName}:`,
-                    error
-                  )
-                );
+                .catch((error) => console.error(`Error fetching contents of folder ${folderName}:`, error));
             }
           } else {
             items.style.display = "none";
@@ -190,7 +166,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .catch((error) => console.error("Error fetching folder names:", error));
 
-  // Add back to menu button functionality
+  // Back to menu button functionality
   const videoContainer = document.querySelector(".video-container");
   const backToMenuButton = document.createElement("a");
   backToMenuButton.href = "#";
@@ -204,10 +180,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector(".sidebar").scrollIntoView();
   });
 
-  videoContainer.parentNode.insertBefore(
-    backToMenuButton,
-    videoContainer.nextSibling
-  );
+  videoContainer.parentNode.insertBefore(backToMenuButton, videoContainer.nextSibling);
 
   // Set initial class for mobile view
   if (window.innerWidth <= 768) {
