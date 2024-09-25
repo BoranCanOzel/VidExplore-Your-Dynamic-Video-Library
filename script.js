@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // take video names from cookies
+  // take video names from cookies.
   const lastVideo = getCookie("lastVideo");
   const lastFolder = getCookie("lastFolder");
 
